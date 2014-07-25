@@ -1,6 +1,6 @@
 # LanxinOpen
 
-TODO: Write a gem description
+Lanxin is Real-time communication application for enterprise internal communicate,with full client support,including Android, iOS, Windows,Mac,Web etc.The Openplatform give the thirdpart company provide service through Lanxin.More information please refer to http://lanxin.cn.
 
 ## Installation
 
@@ -18,7 +18,20 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+configure the LanxinOpen while init,like following code;
+```
+LanxinOpen.config do
+  host "https://open-dev.lanxin.cn" #"http://118.192.68.146"
+  port ""
+  use_new_json true
+end
+```
+then while you want to call the interface,call like this
+```
+open = LanxinOpen.new
+skey = open.fetch_skey("token","devkey")
+puts "fetch skey: #{skey}"
+```
 
 ## Contributing
 
