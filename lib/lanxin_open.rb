@@ -24,8 +24,12 @@ module LanxinOpen
     instance_eval &block
   end
 
+  def self.new(args)
+    OpenPlatformV1.new(args)
+  end
+
   def self.new
-    OpenPlatformV1.new
+    OpenPlatformV1.new({})
   end
 
   def self.dean_hash2xml(p_hash)
@@ -116,13 +120,14 @@ module LanxinOpen
 
   module Platform
     attr_accessor :skey
+    attr_accessor :host,:port,:use_new_json
 
     def dump_config
-      puts "test_config #{LanxinOpen.host}, #{LanxinOpen.port}, #{LanxinOpen.use_new_json}"
+      puts "test_config #{host}, #{port}, #{use_new_json}"
     end
 
     def host_with_port
-      "#{LanxinOpen.host}:#{LanxinOpen.port}"
+      "#{host}:#{port}"
     end
 
     def lx_url(path)
@@ -156,7 +161,6 @@ module LanxinOpen
         end
       end
       gbk = content_utf8(body,"gbk")
-      return gbk
     end
 
     def fetch_skey(token,devkey)
@@ -210,6 +214,12 @@ module LanxinOpen
   class OpenPlatformV1
     include Platform
 
+    def initialize(args)
+      @host = args[:host] || LanxinOpen.host
+      @port = args[:port] || LanxinOpen.port
+      @use_new_json = args[:use_new_json] || LanxinOpen.use_new_json
+    end
+
     def kehu_msg(fieldvalue,from_user)
       req_url = lx_url("/opc/ishow")
       params = {
@@ -231,7 +241,7 @@ module LanxinOpen
         "msgtype" => "text",
         "text" => text_json.to_json
       }
-      base_json["text"] = text_json if LanxinOpen.use_new_json
+      base_json["text"] = text_json if use_new_json
       body = kehu_msg(base_json,from_user)
     end
 
@@ -243,7 +253,6 @@ module LanxinOpen
         "url" => url
       }
       body = kehu_msg(base_json,from_user)
-      return body
     end
 
     def send_pictext_msg(url,open_id,title,from_user)
@@ -255,9 +264,8 @@ module LanxinOpen
         "title" => title,
         "news" => news_json
       }
-      # base_json["news"] = news_json if LanxinOpen.use_new_json
+      # base_json["news"] = news_json if use_new_json
       body = kehu_msg(base_json,from_user)
-      return body
     end
 
     def send_mail_msg(url,open_id,title,from_user)
@@ -309,7 +317,7 @@ module LanxinOpen
       body = encode_resbody(NetUtil.post_req(req_url,params).body)
     end
 
-  end
+  end # End of OpenPlatformV1 class
 
 end
 
