@@ -24,7 +24,7 @@ module LanxinOpen
     instance_eval &block
   end
 
-  def self.new(args)
+  def self.new_with_params(args)
     OpenPlatformV1.new(args)
   end
 
@@ -127,7 +127,11 @@ module LanxinOpen
     end
 
     def host_with_port
-      "#{host}:#{port}"
+      if port and port.length > 0
+        "#{host}:#{port}"
+      else
+        host
+      end
     end
 
     def lx_url(path)
@@ -299,7 +303,8 @@ module LanxinOpen
         "t_id" => 16,
         "d_id" => 1,
         "url" => "/query_menu.shtml",
-        "publicno" => publicno
+        "publicno" => publicno,
+        "skey" => skey
       }
       req_url = lx_url("/opc/ishow")
       body = encode_resbody(NetUtil.post_req(req_url,params).body)
