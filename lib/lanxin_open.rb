@@ -1,4 +1,5 @@
 require "lanxin_open/version"
+require "lanxin_open/sig_verify"
 require 'uri'
 require "json"
 require 'addressable/uri'
@@ -180,6 +181,7 @@ module LanxinOpen
       # body = encode_resbody(NetUtil.post_req(req_url,params).body)
       begin
         body = encode_resbody(NetUtil.post_req(req_url,params).body)
+        puts body
         ret = JSON.parse(body.to_s)
         if ret["state"] == "OK"
           @skey= ret["sessionKey"]
