@@ -206,6 +206,17 @@ module LanxinOpen
       body = encode_resbody(NetUtil.post_req(req_url,params).body)
     end
 
+    def mem_info(mobile=nil,email=nil,orgid=nil)
+      req_url = lx_url("/cgi-bin/member/get")
+      params = {
+        "access_token" => skey,
+        "orgId" => orgid,
+        "mobile" => mobile,
+        "email"  => email,
+      }
+      body = encode_resbody(NetUtil.post_req(req_url,params).body)
+    end
+
   end # End of OpenPlatformV1 class
 
 end
